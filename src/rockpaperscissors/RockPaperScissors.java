@@ -14,8 +14,8 @@ import java.io.*;
  */
 public class RockPaperScissors {
 
-    public static String name, result, wins, output, playerlog, in, count;
-    public static int round, rounds, playerThrow, aiThrow, pScore, cScore, winCount;
+    public static String name, result, wins, output, playerlog, in, read;
+    public static int round, rounds, playerThrow, aiThrow, pScore, cScore, winCount, count, countF;
     public static File playerLog = new File("/Users/kyleluka/Downloads/Github Downloads/RockPaperScissors-master/PlayerLogs/playerLog.txt");
     public static BufferedWriter playerWriter;
     public static BufferedReader playerReader;
@@ -121,7 +121,8 @@ public class RockPaperScissors {
     
     public static void readPlayerLog(){
         
-        count = "";
+        count = 0;
+        read = "";
         
         try{
             playerReader = new BufferedReader(new FileReader(playerLog));
@@ -140,17 +141,15 @@ public class RockPaperScissors {
                in = (playerReader.readLine());
             } catch (IOException e) {
                 e.printStackTrace();
-            }
-            
+            }  
            
-            
             if(in != null){
                 playerlog += (in + "\n");
             }
 
        }while(in != null);
             
-        System.out.println(playerlog);
+        System.out.println(playerlog);  
 
          try {
             playerReader.close();
@@ -170,12 +169,9 @@ public class RockPaperScissors {
         }
 
             try {
-                if(!playerReader.toString().contains(name)){
-                    playerWriter.newLine();
-                }else if(playerReader.toString().contains(name)){
-                    
-                }
-                playerWriter.append(output);
+                
+                    playerWriter.append(output);
+                
             } catch (IOException e) {
             }
         
