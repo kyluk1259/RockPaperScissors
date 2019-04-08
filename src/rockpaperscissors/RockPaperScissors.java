@@ -4,7 +4,9 @@
  * and open the template in the editor.
  */
 package rockpaperscissors;
+
 import java.util.Scanner;
+
 /**
  *
  * @author Kyle's PC
@@ -20,11 +22,11 @@ public class RockPaperScissors {
     public static void main(String[] args) {
         play();
     }
-    
-    public static void play(){
+
+    public static void play() {
         init();
         game();
-    } 
+    }
 
     public static void init() {
         name = Player.getName();
@@ -36,7 +38,7 @@ public class RockPaperScissors {
     public static void game() {
 
         round = 1;
-        
+
         for (int i = 1; i <= rounds; i++) {
 
             System.out.println("\nRound " + round + ": ");
@@ -47,7 +49,7 @@ public class RockPaperScissors {
             System.out.println("Computer throws " + AI.thrown());
             System.out.println(check());
             round++;
-            
+
             if (playerThrow == aiThrow) {
                 i--;
                 round--;
@@ -61,7 +63,7 @@ public class RockPaperScissors {
         } else {
             System.out.println("The game ended in a tie! There is no winner.");
         }
-        
+
         replay();
 
     }
@@ -80,23 +82,28 @@ public class RockPaperScissors {
         return result;
     }
 
-    public static void replay(){
+    public static void replay() {
         System.out.println("\nWould you like to play again? (1 = Yes / 2 = No)");
         Scanner in = new Scanner(System.in);
         String input = in.next();
-        
-        int choice = Integer.parseInt(input);
-        
-        if(choice == 1){
-            play();
-        }else if(choice == 2){
-            System.exit(0);
-        }else{
-           System.out.println("Please choose 1 or 2");
-           replay();
+
+        for (char a : input.toCharArray()) {
+            if (!Character.isDigit(a)) {
+                System.out.println("Please choose 1 or 2");
+                replay();
+            }
         }
-}
-    
-}
 
+        int choice = Integer.parseInt(input);
 
+        if (choice == 1) {
+            play();
+        } else if (choice == 2) {
+            System.exit(0);
+        } else {
+            System.out.println("Please choose 1 or 2");
+            replay();
+        }
+    }
+
+}
