@@ -6,6 +6,7 @@
 package rockpaperscissors;
 
 import java.util.Scanner;
+import java.io.*;
 
 /**
  *
@@ -13,8 +14,11 @@ import java.util.Scanner;
  */
 public class RockPaperScissors {
 
-    public static String name, result;
-    public static int round, rounds, playerThrow, aiThrow, pScore, cScore;
+    public static String name, result, wins, output, playerlog, in, count;
+    public static int round, rounds, playerThrow, aiThrow, pScore, cScore, winCount;
+    public static File playerLog = new File("/Users/kyleluka/Downloads/Github Downloads/RockPaperScissors-master/PlayerLogs/playerLog.txt");
+    public static BufferedWriter playerWriter;
+    public static BufferedReader playerReader;
 
     /**
      * @param args the command line arguments
@@ -30,6 +34,7 @@ public class RockPaperScissors {
 
     public static void init() {
         name = Player.getName();
+        readPlayerLog();
         rounds = Player.getRounds();
         pScore = 0;
         cScore = 0;
@@ -54,16 +59,24 @@ public class RockPaperScissors {
                 i--;
                 round--;
             }
+
+            if (pScore > rounds / 2) {
+                System.out.println("The winner is " + name + "! The computer lost the game.");
+                winCount++;
+                wins = ("Won " + winCount + " time(s)");
+                break;
+            } else if (cScore > rounds / 2) {
+                System.out.println("The winner is the computer! " + name + " lost the game.");
+                wins = ("Won " + winCount + " time(s)");
+                break;
+            }
         }
 
-        if (pScore > cScore) {
-            System.out.println("The winner is " + name + "! The computer lost the game.");
-        } else if (pScore < cScore) {
-            System.out.println("The winner is the computer! " + name + " lost the game.");
-        } else {
+        if (pScore == cScore) {
             System.out.println("The game ended in a tie! There is no winner.");
         }
 
+        writePlayerLog();
         replay();
 
     }
@@ -83,7 +96,7 @@ public class RockPaperScissors {
     }
 
     public static void replay() {
-        System.out.println("\nWould you like to play again? (1 = Yes / 2 = No)");
+        System.out.println("\nWould you like to play again? (1 = Yes / 2 = No)\n");
         Scanner in = new Scanner(System.in);
         String input = in.next();
 
@@ -105,5 +118,72 @@ public class RockPaperScissors {
             replay();
         }
     }
+    
+    public static void readPlayerLog(){
+        
+        count = "";
+        
+        try{
+            playerReader = new BufferedReader(new FileReader(playerLog));
+        }catch(FileNotFoundException e){
+            try{
+            playerLog.createNewFile();
+            }catch(IOException ex){
+                
+            }
+            return;
+        }
+        
+         do{
 
+            try {
+               in = (playerReader.readLine());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            
+           
+            
+            if(in != null){
+                playerlog += (in + "\n");
+            }
+
+       }while(in != null);
+            
+        System.out.println(playerlog);
+
+         try {
+            playerReader.close();
+        } catch (IOException e) {
+
+        }
+    }
+
+    public static void writePlayerLog() {
+        
+        output = (name + ": " + wins);
+
+        try {
+            playerWriter = new BufferedWriter(new FileWriter(playerLog,true));
+        } catch (IOException e) {
+
+        }
+
+            try {
+                if(!playerReader.toString().contains(name)){
+                    playerWriter.newLine();
+                }else if(playerReader.toString().contains(name)){
+                    
+                }
+                playerWriter.append(output);
+            } catch (IOException e) {
+            }
+        
+
+        try {
+            playerWriter.close();
+        } catch (IOException e) {
+
+        }
+    }
 }
