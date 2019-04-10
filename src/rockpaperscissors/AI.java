@@ -12,29 +12,31 @@ import java.util.Scanner;
  * @author Kyle's PC
  */
 public class AI {
-    
-    public static int aiThrow, rand; 
+
+    public static int aiThrow, rand;
     public static String choice;
     public static Scanner in = new Scanner(System.in);
-    
-    public AI(){
-        
+
+    public AI() {
+
     }
-    
-     public static int getThrow(){
-        
-        rand = (int)(Math.random() * 2) + 1;
+
+    //Get random play from computer and return it to game() method as int
+    public static int getThrow() {
+
+        rand = (int) (Math.random() * 2) + 1;
         aiThrow = rand;
-        
-        return aiThrow; 
+
+        return aiThrow;
     }
-     
-     public static String thrown() {
+
+    //Get name of random play from computer and return it to game() method
+    public static String thrown() {
         if (aiThrow == 1) {
             choice = "Rock";
-        }else if(aiThrow == 2){
+        } else if (aiThrow == 2) {
             choice = "Paper";
-        }else{
+        } else {
             choice = "Scissors";
         }
         return choice;

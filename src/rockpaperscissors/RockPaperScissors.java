@@ -7,39 +7,61 @@ package rockpaperscissors;
 
 import java.util.Scanner;
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  *
- * @author Kyle's PC
+ * @author Kyle Lukaszek
+ * 
  */
 public class RockPaperScissors {
 
-    public static String name, result, wins, output, playerlog, in, read;
-    public static int round, rounds, playerThrow, aiThrow, pScore, cScore, winCount, count, countF;
-    public static File playerLog = new File("/Users/kyleluka/Downloads/Github Downloads/RockPaperScissors-master/PlayerLogs/playerLog.txt");
+    public static String name, result, in, nums;
+    public static int round, rounds, playerThrow, aiThrow, pScore, cScore, winCount, count, index;
+    public static File playerLog;
     public static BufferedWriter playerWriter;
     public static BufferedReader playerReader;
+    public static ArrayList<String> names = new ArrayList();
+    public static ArrayList<Integer> wins = new ArrayList();
 
     /**
-     * @param args the command line arguments
+     * Prompts user for name, checks log file for previous players and win counts. 
+     * Prompts user for desired amount of rounds of rock paper scissors. 
+     * Prompts user for play choice (rock, paper, or scissors) and compares to random computer number.
+     * Repeat until someone wins. 
+     * Prompt user if they would like to play again. Write match information and updated information to log file.
      */
+    
+    //initiate play method loop
     public static void main(String[] args) {
         play();
     }
 
+    //initialize variables and run game, 
     public static void play() {
+
         init();
         game();
+
     }
 
+    //Method that initializes variables, questions user for name and checks file for existing names and scores
     public static void init() {
+
+        wins.clear();
+        names.clear();
+        winCount = 0;
+        index = 0;
+        wins = handleFile.readPlayerWins();
+        names = handleFile.readPlayerNames();
         name = Player.getName();
-        readPlayerLog();
         rounds = Player.getRounds();
         pScore = 0;
         cScore = 0;
+
     }
 
+    //Method that runs game, gets plays and checks if someones has won
     public static void game() {
 
         round = 1;
@@ -55,7 +77,7 @@ public class RockPaperScissors {
             System.out.println(check());
             round++;
 
-            if (playerThrow == aiThrow) {
+            if (playerThrow == aiThrow) {           //If round is a tie, round = same
                 i--;
                 round--;
             }
@@ -63,11 +85,9 @@ public class RockPaperScissors {
             if (pScore > rounds / 2) {
                 System.out.println("The winner is " + name + "! The computer lost the game.");
                 winCount++;
-                wins = ("Won " + winCount + " time(s)");
                 break;
             } else if (cScore > rounds / 2) {
                 System.out.println("The winner is the computer! " + name + " lost the game.");
-                wins = ("Won " + winCount + " time(s)");
                 break;
             }
         }
@@ -76,12 +96,14 @@ public class RockPaperScissors {
             System.out.println("The game ended in a tie! There is no winner.");
         }
 
-        writePlayerLog();
+        handleFile.writePlayerLog();
         replay();
 
     }
 
+    //Method that checks who wins the round and returns this result to the game() method
     public static String check() {
+
         if (playerThrow == 1 && aiThrow == 3 || playerThrow == 2 && aiThrow == 1 || playerThrow == 3 && aiThrow == 2) {
             result = name + " Wins!";
             pScore++;
@@ -93,10 +115,13 @@ public class RockPaperScissors {
         }
 
         return result;
+
     }
 
+    //Method that prompts user if they would like to play again
     public static void replay() {
-        System.out.println("\nWould you like to play again? (1 = Yes / 2 = No)\n");
+
+        System.out.println("\nWould you like to play again? (1 = Yes / 2 = No)");
         Scanner in = new Scanner(System.in);
         String input = in.next();
 
@@ -110,76 +135,15 @@ public class RockPaperScissors {
         int choice = Integer.parseInt(input);
 
         if (choice == 1) {
+            System.out.println();
             play();
         } else if (choice == 2) {
             System.exit(0);
+
         } else {
             System.out.println("Please choose 1 or 2");
             replay();
         }
-    }
-    
-    public static void readPlayerLog(){
-        
-        count = 0;
-        read = "";
-        
-        try{
-            playerReader = new BufferedReader(new FileReader(playerLog));
-        }catch(FileNotFoundException e){
-            try{
-            playerLog.createNewFile();
-            }catch(IOException ex){
-                
-            }
-            return;
-        }
-        
-         do{
 
-            try {
-               in = (playerReader.readLine());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }  
-           
-            if(in != null){
-                playerlog += (in + "\n");
-            }
-
-       }while(in != null);
-            
-        System.out.println(playerlog);  
-
-         try {
-            playerReader.close();
-        } catch (IOException e) {
-
-        }
-    }
-
-    public static void writePlayerLog() {
-        
-        output = (name + ": " + wins);
-
-        try {
-            playerWriter = new BufferedWriter(new FileWriter(playerLog,true));
-        } catch (IOException e) {
-
-        }
-
-            try {
-                
-                    playerWriter.append(output);
-                
-            } catch (IOException e) {
-            }
-        
-
-        try {
-            playerWriter.close();
-        } catch (IOException e) {
-
-        }
     }
 }
